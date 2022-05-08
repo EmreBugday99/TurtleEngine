@@ -1,32 +1,12 @@
-# Prerequisites
-*.d
+# Visual Studio Files
+*/.vs
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+# Compilation/Build Files
+TurtleEngine/build
 
 # Executables
 *.exe
-*.out
-*.app
