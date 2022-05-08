@@ -1,5 +1,6 @@
 project "Engine"
-	location ("build/" .. _ACTION .. "/engine")
+	filter {}
+	location ("build/" .. _ACTION .. "/%{prj.name}")
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"

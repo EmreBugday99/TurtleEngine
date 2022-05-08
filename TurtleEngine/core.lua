@@ -1,6 +1,6 @@
 project "Core"
 	filter {}
-	location ("build/" .. _ACTION .. "/core")
+	location ("build/" .. _ACTION .. "/%{prj.name}")
 	language "C++"
 	cppdialect "C++17"
 

@@ -34,10 +34,10 @@ unsigned int TurtleCore::Event::ListenerAmount() const
 	return static_cast<unsigned int>(Listeners.size());
 }
 
-void TurtleCore::Event::Notify(void* eventData) const
+void TurtleCore::Event::Invoke(const EventData& eventData) const
 {
-	for (Listener* listener : Listeners)
+	for (const Listener* listener : Listeners)
 	{
-		listener->OnNotify(eventData);
+		listener->Invoke(eventData);
 	}
 }

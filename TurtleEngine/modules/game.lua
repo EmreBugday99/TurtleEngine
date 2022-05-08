@@ -1,11 +1,11 @@
 project "Game"
 	filter {}
-	location ("build/" .. _ACTION .. "/game")
+	location ("../build/" .. _ACTION .. "/modules/%{prj.name}")
 	language "C++"
 	cppdialect "C++17"
 
-	targetdir ("build/".. _ACTION .. "/binaries/" .. outputdirectory .. "/%{prj.name}")
-	objdir ("build/" .. _ACTION .. "/intermediate/" .. outputdirectory .. "/%{prj.name}")
+	targetdir ("../build/".. _ACTION .. "/binaries/" .. outputdirectory .. "/modules/%{prj.name}")
+	objdir ("../build/" .. _ACTION .. "/intermediate/" .. outputdirectory .. "/modules/%{prj.name}")
 
 	files
 	{
@@ -16,7 +16,7 @@ project "Game"
 
     includedirs
     {
-        "core"
+        "../core"
     }
 
 	-- Defines without any filter

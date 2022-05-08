@@ -1,17 +1,21 @@
 #pragma once
+#include <functional>
 #include "../API.h"
 
 namespace TurtleCore
 {
+	struct EventData;
 	class Event;
 
-	class API_EXPORT Listener
+	class Listener
 	{
+	private:
+		std::function<void(const EventData&)> Callback;
+
 	public:
-		virtual ~Listener();
-		virtual void OnNotify(void* eventData) = 0;
-		virtual void OnAdded(Event& addedEvent) = 0;
-		virtual void OnRemoved(Event& removedEvent) = 0;
-		static void DeleteListener(const Listener* listenerToDelete);
+		API_EXPORT void Invoke(const EventData& evenData) const;
+		API_EXPORT void BindCallback(std::function<void(const EventData&)> callback);
+		API_EXPORT void UnbindCallback();
+		API_EXPORT static void DeleteListener(const Listener* listenerToDelete);
 	};
 }

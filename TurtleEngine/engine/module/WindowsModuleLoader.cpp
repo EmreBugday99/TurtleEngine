@@ -46,7 +46,6 @@ std::vector<std::string> TurtleEngine::WindowsModuleLoader::GetModuleNames()
 				continue;
 
 			std::string moduleFileName = file.path().filename().string();
-			//moduleFileName.erase(std::remove(moduleFileName.begin(), moduleFileName.end(), 'G'), moduleFileName.end());
 
 			modules.push_back(moduleFileName.c_str());
 		}
@@ -74,11 +73,19 @@ TurtleCore::TurtleModule* TurtleEngine::WindowsModuleLoader::LinkModule(std::str
 
 	HINSTANCE hinstLib = LoadLibrary(wtext);
 	if (hinstLib == NULL)
+	{
+		std::cout << "Module Linking Error: Failed to load library -> " << moduleName << std::endl;
+		std::cout << GetLastError() << std::endl;
 		return nullptr;
+	}
 
 	ModuleFactory ProcAdd = (ModuleFactory)GetProcAddress(hinstLib, "?CreateModule@ModuleFactory@@SAPEAVTurtleModule@TurtleCore@@XZ");
 	if (ProcAdd == NULL)
+	{
+		std::cout << "Module Linking Error: Failed to obtain ModuleFactory function ->" << moduleName << std::endl;
+		std::cout << GetLastError() << std::endl;
 		return nullptr;
+	}
 
 	TurtleCore::TurtleModule* newModule = (ProcAdd)();
 	return newModule;

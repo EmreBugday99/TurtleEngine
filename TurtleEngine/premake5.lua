@@ -11,5 +11,6 @@ workspace "TurtleEngine"
 	}
 
 include "core.lua"
-include "game.lua"
 include "engine.lua"
+include "modules/game.lua"
+include "modules/sdl_renderer.lua"

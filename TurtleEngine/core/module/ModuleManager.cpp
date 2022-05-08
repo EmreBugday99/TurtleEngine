@@ -2,8 +2,14 @@
 #include "TurtleModule.h"
 #include "../event/CoreEvents.h"
 #include "../event/Event.h"
+#include "../event/EventData.h"
 
-TurtleCore::ModuleManager::ModuleManager() = default;
+TurtleCore::ModuleManager::ModuleManager()
+{
+	CoreEvents::AddEvent("ModuleLoad", &ModuleLoadEvent);
+	CoreEvents::AddEvent("ModuleUnload", &ModuleUnloadEvent);
+	CoreEvents::AddEvent("ModuleStart", &ModuleStartEvent);
+}
 
 TurtleCore::ModuleManager::~ModuleManager()
 {
@@ -12,6 +18,10 @@ TurtleCore::ModuleManager::~ModuleManager()
 		Modules[i]->OnModuleUnload();
 		delete Modules[i];
 	}
+
+	CoreEvents::RemoveEvent("ModuleLoad");
+	CoreEvents::RemoveEvent("ModuleUnload");
+	CoreEvents::RemoveEvent("ModuleStart");
 }
 
 void TurtleCore::ModuleManager::AddModule(TurtleModule& moduleToAdd, bool& result)
@@ -40,6 +50,7 @@ void TurtleCore::ModuleManager::RemoveModule(const char* moduleToRemove, bool& r
 			Modules.erase(Modules.begin() + i);
 
 			turtleModule->OnModuleUnload();
+			ModuleUnloadEvent.Invoke(EventData("ModuleUnload", turtleModule));
 			delete turtleModule;
 
 			result = true;
@@ -78,14 +89,21 @@ TurtleCore::TurtleModule* TurtleCore::ModuleManager::GetModule(const char* modul
 	return nullptr;
 }
 
-void TurtleCore::ModuleManager::LoadAllModules()
+void TurtleCore::ModuleManager::LoadAllModules(Core* core) const
 {
 	for (TurtleModule* turtleModule : Modules)
 	{
-		turtleModule->OnModuleLoad();
+		turtleModule->OnModuleLoad(core);
 
-		Event* moduleLoadEvent = CoreEvents::GetEvent("ModuleLoad");
-		if (moduleLoadEvent != nullptr)
-			moduleLoadEvent->Notify(turtleModule);
+		ModuleLoadEvent.Invoke(EventData("ModuleLoad", turtleModule));
+	}
+}
+
+void TurtleCore::ModuleManager::StartAllModules() const
+{
+	for (TurtleModule* turtleModule : Modules)
+	{
+		turtleModule->OnModuleStart();
+		ModuleStartEvent.Invoke(EventData("ModuleStart", turtleModule));
 	}
 }

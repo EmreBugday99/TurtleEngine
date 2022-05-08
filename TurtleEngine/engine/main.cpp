@@ -1,41 +1,47 @@
 #include <iostream>
-
 #include "event/CoreEvents.h"
 #include "event/Event.h"
-#include "module/ModuleLoadedListener.h"
 #include "module/ModuleManager.h"
-
 #include "module/TurtleModule.h"
 #include "module/WindowsModuleLoader.h"
+#include "Core.h"
 
 typedef TurtleCore::TurtleModule* (__cdecl* ModuleFactory)();
 
 int main()
 {
-	auto manager = new TurtleCore::ModuleManager;
-	auto moduleLoader = new TurtleEngine::WindowsModuleLoader;
+	TurtleCore::Core core;
+	TurtleCore::ModuleManager manager;
+	TurtleEngine::WindowsModuleLoader moduleLoader;
 
 	TurtleCore::Event testEvent;
-	const auto listener = reinterpret_cast<TurtleCore::Listener*>(new TurtleEngine::ModuleLoadedListener);
 
-	TurtleCore::CoreEvents::AddEvent("ModuleLoad", &testEvent);
-	TurtleCore::CoreEvents::GetEvent("ModuleLoad")->AddListener(listener);
+	std::cout << "Modules In Directory: " << moduleLoader.GetModuleCount() << std::endl;
 
-	for (const auto& moduleName : moduleLoader->GetModuleNames())
+	for (const auto& moduleName : moduleLoader.GetModuleNames())
 	{
-		TurtleCore::TurtleModule* linkedModule = moduleLoader->LinkModule("modules/" + moduleName);
-		if (linkedModule != nullptr)
+		TurtleCore::TurtleModule* linkedModule = moduleLoader.LinkModule("modules/" + moduleName);
+		if (linkedModule == nullptr)
 		{
-			std::cout << "Linked: " << linkedModule->ModuleName << std::endl;
-			bool successful = false;
-			manager->AddModule(*linkedModule, successful);
-
-			if (successful == false)
-				std::cout << "Failed to add module" << linkedModule->ModuleName << std::endl;
+			std::cout << "Failed to link with " << moduleName << std::endl;
+			continue;
 		}
+
+		std::cout << "Linked: " << linkedModule->ModuleName << std::endl;
+		bool successful = false;
+		manager.AddModule(*linkedModule, successful);
+
+		if (successful == false)
+			std::cout << "Failed to add module" << linkedModule->ModuleName << std::endl;
 	}
 
-	manager->LoadAllModules();
+	manager.LoadAllModules(&core);
+
+	core.Initialize();
+
+	manager.StartAllModules();
+
+	while (true) {}
 
 	return 0;
 }
