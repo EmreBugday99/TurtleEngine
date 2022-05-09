@@ -10,8 +10,9 @@ private:
 	SDL_Renderer* Renderer;
 
 public:
-	SDLRenderer(bool& success, SDLWindow* window);
+	SDLRenderer();
 
+	void Initialize(bool& success, const SDLWindow* window);
 	void Render() override;
 	void Destroy() override;
 	SDL_Renderer* GetRenderer() const;

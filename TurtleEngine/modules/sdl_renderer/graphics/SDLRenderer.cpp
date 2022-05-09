@@ -2,7 +2,10 @@
 #include "SDL_render.h"
 #include "SDLWindow.h"
 
-SDLRenderer::SDLRenderer(bool& success, SDLWindow* window) : Renderer(nullptr)
+SDLRenderer::SDLRenderer(): Renderer(nullptr) {}
+
+
+void SDLRenderer::Initialize(bool& success, const SDLWindow* window)
 {
 	success = false;
 
@@ -22,7 +25,9 @@ void SDLRenderer::Render()
 
 void SDLRenderer::Destroy()
 {
+	// Warning: It seems like SDL is de-allocating the memory for us.
 	SDL_DestroyRenderer(Renderer);
+	Renderer = nullptr;
 }
 
 SDL_Renderer* SDLRenderer::GetRenderer() const

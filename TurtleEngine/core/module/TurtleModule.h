@@ -14,7 +14,7 @@ namespace TurtleCore
 		TurtleModule(const char* moduleName);
 		virtual ~TurtleModule() = 0;
 		virtual void OnModuleLoad(Core* core) = 0;
-		virtual void OnModuleUnload() = 0;
-		virtual void OnModuleStart() = 0;
+		virtual void OnModuleUnload(Core* core) = 0;
+		virtual void OnModuleStart(Core* core) = 0;
 	};
 }

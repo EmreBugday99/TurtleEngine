@@ -1,15 +1,15 @@
 #pragma once
 
+#include "SDLRenderer.h"
 #include "graphics/Window.h"
 
 struct SDL_Window;
-class SDLRenderer;
 
 class SDLWindow : TurtleCore::Window
 {
 private:
 	SDL_Window* Window;
-	SDLRenderer* Renderer;
+	SDLRenderer Renderer;
 	bool IsRunning;
 
 public:

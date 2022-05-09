@@ -3,25 +3,31 @@
 #include "../event/CoreEvents.h"
 #include "../event/Event.h"
 #include "../event/EventData.h"
+#include "../event/EventEnum.h"
 
-TurtleCore::ModuleManager::ModuleManager()
+TurtleCore::ModuleManager::ModuleManager (): Engine(nullptr)
 {
-	CoreEvents::AddEvent("ModuleLoad", &ModuleLoadEvent);
-	CoreEvents::AddEvent("ModuleUnload", &ModuleUnloadEvent);
-	CoreEvents::AddEvent("ModuleStart", &ModuleStartEvent);
+	CoreEvents::AddEvent(GenerateEngineEventId(EventEnum::AfterModuleLoad), &ModuleLoadEvent);
+	CoreEvents::AddEvent(GenerateEngineEventId(EventEnum::AfterModuleUnload), &ModuleUnloadEvent);
+	CoreEvents::AddEvent(GenerateEngineEventId(EventEnum::AfterModuleStart), &ModuleStartEvent);
 }
 
 TurtleCore::ModuleManager::~ModuleManager()
 {
 	for (int i = static_cast<int>(Modules.size()) - 1; i >= 0; i--)
 	{
-		Modules[i]->OnModuleUnload();
+		Modules[i]->OnModuleUnload(Engine);
 		delete Modules[i];
 	}
 
-	CoreEvents::RemoveEvent("ModuleLoad");
-	CoreEvents::RemoveEvent("ModuleUnload");
-	CoreEvents::RemoveEvent("ModuleStart");
+	CoreEvents::RemoveEvent(GenerateEngineEventId(EventEnum::AfterModuleLoad));
+	CoreEvents::RemoveEvent(GenerateEngineEventId(EventEnum::AfterModuleUnload));
+	CoreEvents::RemoveEvent(GenerateEngineEventId(EventEnum::AfterModuleStart));
+}
+
+void TurtleCore::ModuleManager::Initialize(Core* core)
+{
+	Engine = core;
 }
 
 void TurtleCore::ModuleManager::AddModule(TurtleModule& moduleToAdd, bool& result)
@@ -49,7 +55,7 @@ void TurtleCore::ModuleManager::RemoveModule(const char* moduleToRemove, bool& r
 
 			Modules.erase(Modules.begin() + i);
 
-			turtleModule->OnModuleUnload();
+			turtleModule->OnModuleUnload(Engine);
 			ModuleUnloadEvent.Invoke(EventData("ModuleUnload", turtleModule));
 			delete turtleModule;
 
@@ -103,7 +109,7 @@ void TurtleCore::ModuleManager::StartAllModules() const
 {
 	for (TurtleModule* turtleModule : Modules)
 	{
-		turtleModule->OnModuleStart();
+		turtleModule->OnModuleStart(Engine);
 		ModuleStartEvent.Invoke(EventData("ModuleStart", turtleModule));
 	}
 }

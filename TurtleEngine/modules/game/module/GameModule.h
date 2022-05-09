@@ -8,7 +8,7 @@ public:
 	~GameModule() override;
 
 	void OnModuleLoad(TurtleCore::Core* core) override;
-	void OnModuleUnload() override;
+	void OnModuleUnload(TurtleCore::Core* core) override;
 
-	void OnModuleStart() override;
+	void OnModuleStart(TurtleCore::Core* core) override;
 };

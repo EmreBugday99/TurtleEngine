@@ -1,17 +1,10 @@
 #include "GameModule.h"
-#include <iostream>
 
 GameModule::GameModule() : TurtleModule("Game") {}
 GameModule::~GameModule() = default;
 
-void GameModule::OnModuleLoad(TurtleCore::Core* core)
-{
-}
+void GameModule::OnModuleLoad(TurtleCore::Core* core) {}
 
-void GameModule::OnModuleUnload()
-{
-}
+void GameModule::OnModuleUnload(TurtleCore::Core* core) {}
 
-void GameModule::OnModuleStart()
-{
-}
+void GameModule::OnModuleStart(TurtleCore::Core* core) {}

@@ -1,11 +1,11 @@
 #include "SDLWindow.h"
-
 #include <iostream>
-
 #include "SDL.h"
 #include "SDLRenderer.h"
 
-SDLWindow::SDLWindow() : Window(nullptr), Renderer(nullptr), IsRunning(false) {}
+SDLWindow::SDLWindow() : Window(nullptr), IsRunning(false)
+{
+}
 
 void SDLWindow::Initialize(bool& success, const char* title, int width, int height)
 {
@@ -20,16 +20,8 @@ void SDLWindow::Initialize(bool& success, const char* title, int width, int heig
 		return;
 	std::cout << "SDL Window Created" << std::endl;
 
-	bool rendererSuccess;
-	Renderer = new SDLRenderer(rendererSuccess, this);
-	if (rendererSuccess == false)
-	{
-		delete Renderer;
-		return;
-	}
-
 	std::cout << "SDL Renderer Created" << std::endl;
-	SDL_SetRenderDrawColor(Renderer->GetRenderer(), 255, 255, 255, 255);
+	SDL_SetRenderDrawColor(Renderer.GetRenderer(), 255, 255, 255, 255);
 
 	IsRunning = true;
 	success = true;
@@ -56,10 +48,10 @@ void SDLWindow::HandleEvents()
 void SDLWindow::Destroy()
 {
 	IsRunning = false;
-	SDL_DestroyWindow(Window);
-	Renderer->Destroy();
+	Renderer.Destroy();
 
-	delete Renderer;
+	SDL_DestroyWindow(Window);
+	Window = nullptr;
 	SDL_Quit();
 }
 

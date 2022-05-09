@@ -2,27 +2,32 @@
 
 #include "event/CoreEvents.h"
 #include "event/EventData.h"
+#include "event/EventEnum.h"
 
 TurtleCore::Core::Core() : Window(nullptr)
 {
-	CoreEvents::AddEvent("CoreInitialize", &CoreInitializeEvent);
-	CoreEvents::AddEvent("CoreStart", &CoreStartEvent);
+	CoreEvents::AddEvent(GenerateEngineEventId(EventEnum::BeforeCoreInitialize), &BeforeCoreInitialize);
+	CoreEvents::AddEvent(GenerateEngineEventId(EventEnum::AfterCoreInitialize), &AfterCoreInitialize);
+	CoreEvents::AddEvent(GenerateEngineEventId(EventEnum::AfterCoreStart), & AfterCoreStart);
 }
 
 TurtleCore::Core::~Core()
 {
-	CoreEvents::RemoveEvent("CoreInitialize");
-	CoreEvents::RemoveEvent("CoreStart");
-
-	delete Window;
+	CoreEvents::RemoveEvent(GenerateEngineEventId(EventEnum::BeforeCoreInitialize));
+	CoreEvents::RemoveEvent(GenerateEngineEventId(EventEnum::AfterCoreInitialize));
+	CoreEvents::RemoveEvent(GenerateEngineEventId(EventEnum::AfterCoreStart));
 }
 
 void TurtleCore::Core::Initialize()
 {
-	CoreInitializeEvent.Invoke(EventData("CoreInitialize", this));
+	BeforeCoreInitialize.Invoke(EventData("BeforeCoreInitialize", this));
+
+	ModuleManager.LoadAllModules(this);
+	AfterCoreInitialize.Invoke(EventData("AfterCoreInitialize", this));
 }
 
 void TurtleCore::Core::Start()
 {
-	CoreStartEvent.Invoke(EventData("CoreStart", this));
+	ModuleManager.StartAllModules();
+	AfterCoreStart.Invoke(EventData("AfterCoreStart", this));
 }

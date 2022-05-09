@@ -11,8 +11,9 @@ namespace TurtleCore
 		Window* Window;
 
 	private:
-		Event CoreInitializeEvent;
-		Event CoreStartEvent;
+		Event BeforeCoreInitialize;
+		Event AfterCoreInitialize;
+		Event AfterCoreStart;
 
 	public:
 		API_EXPORT Core();
