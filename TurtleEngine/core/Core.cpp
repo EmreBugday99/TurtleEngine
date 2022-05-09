@@ -13,6 +13,8 @@ TurtleCore::Core::Core() : Window(nullptr)
 
 TurtleCore::Core::~Core()
 {
+	ModuleManager.UnloadAllModules();
+
 	CoreEvents::RemoveEvent(GenerateEngineEventId(EventEnum::BeforeCoreInitialize));
 	CoreEvents::RemoveEvent(GenerateEngineEventId(EventEnum::AfterCoreInitialize));
 	CoreEvents::RemoveEvent(GenerateEngineEventId(EventEnum::AfterCoreStart));
@@ -21,8 +23,9 @@ TurtleCore::Core::~Core()
 void TurtleCore::Core::Initialize()
 {
 	BeforeCoreInitialize.Invoke(EventData("BeforeCoreInitialize", this));
+	ModuleManager.Initialize(this);
 
-	ModuleManager.LoadAllModules(this);
+	ModuleManager.LoadAllModules();
 	AfterCoreInitialize.Invoke(EventData("AfterCoreInitialize", this));
 }
 

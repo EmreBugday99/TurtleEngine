@@ -95,11 +95,11 @@ TurtleCore::TurtleModule* TurtleCore::ModuleManager::GetModule(const char* modul
 	return nullptr;
 }
 
-void TurtleCore::ModuleManager::LoadAllModules(Core* core) const
+void TurtleCore::ModuleManager::LoadAllModules() const
 {
 	for (TurtleModule* turtleModule : Modules)
 	{
-		turtleModule->OnModuleLoad(core);
+		turtleModule->OnModuleLoad(Engine);
 
 		ModuleLoadEvent.Invoke(EventData("ModuleLoad", turtleModule));
 	}
@@ -111,5 +111,15 @@ void TurtleCore::ModuleManager::StartAllModules() const
 	{
 		turtleModule->OnModuleStart(Engine);
 		ModuleStartEvent.Invoke(EventData("ModuleStart", turtleModule));
+	}
+}
+
+void TurtleCore::ModuleManager::UnloadAllModules()
+{
+	for (TurtleModule* turtleModule : Modules)
+	{
+		bool success = false;
+		RemoveModule(turtleModule->ModuleName, success);
+		//TODO: Handle failed module unloading
 	}
 }

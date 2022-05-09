@@ -2,7 +2,7 @@
 
 #include <utility>
 
-TurtleCore::Listener::Listener(bool isHeapAllocated) : IsHeapAllocated_M(isHeapAllocated) {}
+TurtleCore::Listener::Listener() {}
 
 void TurtleCore::Listener::Invoke(const EventData& evenData) const
 {
@@ -17,15 +17,4 @@ void TurtleCore::Listener::BindCallback(std::function<void(const EventData&)> ca
 void TurtleCore::Listener::UnbindCallback()
 {
 	Callback = nullptr;
-}
-
-void TurtleCore::Listener::DeleteListener(Listener* listenerToDelete)
-{
-	if (listenerToDelete->IsHeapAllocated())
-		delete listenerToDelete;
-}
-
-bool TurtleCore::Listener::IsHeapAllocated()
-{
-	return IsHeapAllocated_M;
 }

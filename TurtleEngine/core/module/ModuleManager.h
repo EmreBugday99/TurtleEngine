@@ -26,7 +26,8 @@ namespace TurtleCore
 		API_EXPORT void RemoveModule(const char* moduleToRemove, bool& result);
 		API_EXPORT void HasModule(const char* moduleName, bool& result) const;
 		API_EXPORT TurtleModule* GetModule(const char* moduleName, bool& result) const;
-		API_EXPORT void LoadAllModules(Core* core) const;
+		API_EXPORT void LoadAllModules() const;
 		API_EXPORT void StartAllModules() const;
+		API_EXPORT void UnloadAllModules();
 	};
 }

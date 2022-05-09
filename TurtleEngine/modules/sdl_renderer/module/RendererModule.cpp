@@ -37,7 +37,6 @@ void RendererModule::OnModuleUnload(TurtleCore::Core* core)
 	if (coreEvent != nullptr)
 		coreEvent->RemoveListener(&AfterCoreInitialize);
 	AfterCoreInitialize.UnbindCallback();
-
 	core->Window = nullptr;
 }
 

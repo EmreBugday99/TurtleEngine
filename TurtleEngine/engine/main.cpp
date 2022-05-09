@@ -7,7 +7,5 @@ int main()
 	runtime.Core.Initialize();
 	runtime.Core.Start();
 
-	while (true) {}
-
 	return 0;
 }
