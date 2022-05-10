@@ -1,6 +1,13 @@
 #include "SDLRenderer.h"
+
+#include <iostream>
+#include <SDL_image.h>
 #include "SDL_render.h"
 #include "SDLWindow.h"
+
+
+SDL_Texture* texture;
+SDL_Rect sR, dR;
 
 SDLRenderer::SDLRenderer(): Renderer(nullptr) {}
 
@@ -14,11 +21,20 @@ void SDLRenderer::Initialize(bool& success, const SDLWindow* window)
 		return;
 
 	success = true;
+
+	SDL_Surface* tempSurface = IMG_Load("assets/boss.png");
+	texture = SDL_CreateTextureFromSurface(Renderer, tempSurface);
+	SDL_FreeSurface(tempSurface);
 }
 
 void SDLRenderer::Render()
 {
 	SDL_RenderClear(Renderer);
+
+	dR.h = 64;
+	dR.w = 64;
+
+	SDL_RenderCopy(Renderer, texture, nullptr, &dR);
 
 	SDL_RenderPresent(Renderer);
 }

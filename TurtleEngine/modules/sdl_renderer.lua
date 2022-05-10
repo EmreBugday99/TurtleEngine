@@ -27,7 +27,7 @@ project "SDLRenderer"
 	filter "system:windows"
 		kind "SharedLib"
 		systemversion "latest"
-		links {"Core", "SDL2", "SDL2main"}
+		links {"Core", "SDL2", "SDL2main", "SDL2_image"}
 		defines "TURTLE_OS_WINDOWS"
 
 	filter "configurations:Debug"

@@ -10,7 +10,8 @@ namespace TurtleCore
 		AfterCoreStart,
 		AfterModuleLoad,
 		AfterModuleUnload,
-		AfterModuleStart
+		AfterModuleStart,
+		ObjectDestroyed
 	};
 
 	inline static std::string GenerateEngineEventId(const unsigned int& eventId)

@@ -3,7 +3,8 @@
 #include "SDL.h"
 #include "SDLRenderer.h"
 
-SDLWindow::SDLWindow() : Window(nullptr), IsRunning(false)
+
+SDLWindow::SDLWindow() : Window(nullptr), Running(false)
 {
 }
 
@@ -15,15 +16,19 @@ void SDLWindow::Initialize(bool& success, const char* title, int width, int heig
 		return;
 	std::cout << "SDL Initialized" << std::endl;
 
-	Window = SDL_CreateWindow(title, 0, 0, width, height, 0);
+	Window = SDL_CreateWindow(title, 50, 50, width, height, 0);
 	if (Window == nullptr)
 		return;
 	std::cout << "SDL Window Created" << std::endl;
 
-	std::cout << "SDL Renderer Created" << std::endl;
-	SDL_SetRenderDrawColor(Renderer.GetRenderer(), 255, 255, 255, 255);
+	Renderer.Initialize(success, this);
+	if (success == false || Renderer.GetRenderer() == nullptr)
+		return;
 
-	IsRunning = true;
+	std::cout << "SDL Renderer Created" << std::endl;
+	SDL_SetRenderDrawColor(Renderer.GetRenderer(), 0, 0, 0, 255);
+
+	Running = true;
 	success = true;
 }
 
@@ -36,7 +41,7 @@ void SDLWindow::HandleEvents()
 	{
 	case SDL_QUIT:
 	{
-		IsRunning = false;
+		Running = false;
 		break;
 	}
 
@@ -45,9 +50,24 @@ void SDLWindow::HandleEvents()
 	}
 }
 
+void SDLWindow::Render()
+{
+	Renderer.Render();
+}
+
+bool SDLWindow::IsRunning()
+{
+	return Running;
+}
+
+void SDLWindow::Stop()
+{
+	Running = false;
+}
+
 void SDLWindow::Destroy()
 {
-	IsRunning = false;
+	Running = false;
 	Renderer.Destroy();
 
 	SDL_DestroyWindow(Window);
