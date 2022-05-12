@@ -14,6 +14,10 @@ void TurtleCore::Entity::Start()
 
 void TurtleCore::Entity::Update()
 {
+	for (int i = static_cast<int>(Components.size()) - 1; i >= 0; i--)
+	{
+		Components[i]->Update();
+	}
 }
 
 void TurtleCore::Entity::Destroy()
@@ -27,4 +31,9 @@ void TurtleCore::Entity::Destroy()
 
 	Engine->RemoveEntity(this);
 	Engine->GetMemory().MarkObjectForGC(this);
+}
+
+TurtleCore::Core* TurtleCore::Entity::GetEngine() const
+{
+	return Engine;
 }

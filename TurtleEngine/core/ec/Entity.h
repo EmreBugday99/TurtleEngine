@@ -4,6 +4,7 @@
 #include "../event/Listener.h"
 #include "Component.h"
 #include "../Core.h"
+#include <iostream>
 
 namespace TurtleCore
 {
@@ -11,6 +12,7 @@ namespace TurtleCore
 	{
 	private:
 		friend class Core;
+		friend class ECMemory;
 
 		std::vector<Component*> Components;
 		Core* Engine;
@@ -18,48 +20,49 @@ namespace TurtleCore
 		Entity(Core* core);
 		~Entity() override;
 
-	protected:
+	public:
 		API_EXPORT void Initialize() override;
 		API_EXPORT void Start() override;
 		API_EXPORT void Update() override;
+
+		API_EXPORT Core* GetEngine() const;
 		API_EXPORT void Destroy() override;
 
-	public:
 		template<typename T>
-		API_EXPORT void HasComponent(bool& hasComponent) const
+		API_EXPORT bool HasComponent() const
 		{
-			hasComponent = false;
-
 			for (Component* component : Components)
 			{
 				if (typeid(T) == typeid(component))
-				{
-					hasComponent = true;
-					return;
-				}
+					return true;
 			}
+
+			return false;
 		}
 
 		template<typename T>
-		API_EXPORT void GetComponent(T* component)
+		API_EXPORT T* GetComponent()
 		{
-			component = nullptr;
 			for (Component* iteratedComponent : Components)
 			{
-				if (typeid(iteratedComponent) == typeid(T))
-				{
-					component = iteratedComponent;
-					return;
-				}
+				const type_info& typeInfoOne = typeid(*iteratedComponent);
+				const type_info& typeInfoTwo = typeid(T);
+
+				if (typeInfoOne == typeInfoTwo)
+					return reinterpret_cast<T*>(iteratedComponent);
 			}
+
+			return nullptr;
 		}
 
 		template<typename T>
 		API_EXPORT T& AddComponent()
 		{
-			T* component = new T(this);
-			Components.push_back(reinterpret_cast<Component*>(component));
+			T* component = new T();
+			component->Owner = this;
+			Engine->GetMemory().ComponentWaitingToStart.push_back(reinterpret_cast<Component*>(component));
 
+			component->Initialize();
 			return *component;
 		}
 
@@ -68,7 +71,10 @@ namespace TurtleCore
 		{
 			for (int i = static_cast<int>(Components.size()) - 1; i >= 0; i--)
 			{
-				if (typeid(Components[i]) != typeid(T))
+				const type_info& typeInfoOne = typeid(*Components[i]);
+				const type_info& typeInfoTwo = typeid(T);
+
+				if (typeInfoOne != typeInfoTwo)
 					continue;
 
 				Components.erase(Components.begin() + i);

@@ -1,42 +1,58 @@
 #include "SDLRenderer.h"
-
-#include <iostream>
-#include <SDL_image.h>
+#include <SDL_ttf.h>
 #include "SDL_render.h"
 #include "SDLWindow.h"
 
+SDLRenderer::SDLRenderer() : Renderer(nullptr), Window(nullptr) {}
 
-SDL_Texture* texture;
-SDL_Rect sR, dR;
-
-SDLRenderer::SDLRenderer(): Renderer(nullptr) {}
-
-
-void SDLRenderer::Initialize(bool& success, const SDLWindow* window)
+void SDLRenderer::Initialize(bool& success, SDLWindow* window)
 {
 	success = false;
 
-	Renderer = SDL_CreateRenderer(window->GetWindow(), -1, 0);
+	Renderer = SDL_CreateRenderer(static_cast<SDL_Window*>(window->GetWindow()), -1, 0);
 	if (Renderer == nullptr)
 		return;
 
+	Window = window;
 	success = true;
-
-	SDL_Surface* tempSurface = IMG_Load("assets/boss.png");
-	texture = SDL_CreateTextureFromSurface(Renderer, tempSurface);
-	SDL_FreeSurface(tempSurface);
 }
 
 void SDLRenderer::Render()
 {
-	SDL_RenderClear(Renderer);
+	//if (TTF_Init() != 0)
+	//{
+	//	std::cout << "Failed to Initialize TTF" << std::endl;
+	//	return;
+	//}
 
-	dR.h = 64;
-	dR.w = 64;
+	//TTF_Font* testFont = TTF_OpenFont("assets/Roboto-Regular.ttf", 16);
+	//if (testFont == nullptr)
+	//{
+	//	std::cout << "It aint working" << std::endl;
+	//}
 
-	SDL_RenderCopy(Renderer, texture, nullptr, &dR);
+	//SDL_Color fontColor = { 255, 0, 0, 255 };
+
+	//std::string a = "Number: ";
+	//SDL_Surface* fontSurface = TTF_RenderUTF8_Solid(testFont, a.c_str(), fontColor);
+	//SDL_Rect destRect;
+	//destRect.h = 64;
+	//destRect.w = 128;
+	//destRect.y = 100;
+
+	//SDL_Texture* fontTexture = SDL_CreateTextureFromSurface(Renderer, fontSurface);
+	//SDL_RenderCopy(Renderer, fontTexture, nullptr, &destRect);
+
+	//TTF_CloseFont(testFont);
+	//SDL_DestroyTexture(fontTexture);
+	//SDL_FreeSurface(fontSurface);
 
 	SDL_RenderPresent(Renderer);
+}
+
+void SDLRenderer::Clear()
+{
+	SDL_RenderClear(Renderer);
 }
 
 void SDLRenderer::Destroy()
@@ -46,7 +62,7 @@ void SDLRenderer::Destroy()
 	Renderer = nullptr;
 }
 
-SDL_Renderer* SDLRenderer::GetRenderer() const
+void* SDLRenderer::GetRenderer()
 {
 	return Renderer;
 }

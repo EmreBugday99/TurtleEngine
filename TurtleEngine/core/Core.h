@@ -2,6 +2,7 @@
 #include "ec/ECMemory.h"
 #include "graphics/Window.h"
 #include "module/ModuleManager.h"
+#include "input/InputManager.h"
 
 namespace TurtleCore
 {
@@ -11,6 +12,7 @@ namespace TurtleCore
 	{
 	public:
 		ModuleManager ModuleManager;
+		InputManager InputManager;
 		Window* Window;
 
 	private:

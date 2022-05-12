@@ -14,7 +14,7 @@ project "SDLRenderer"
 		"sdl_renderer/**.cpp"
 	}
 
-	libdirs {"../dependencies/sdl/lib"}
+	libdirs {"../dependencies/sdl/lib", "../dependencies/ftl/lib"}
     includedirs
     {
 		"../dependencies/sdl/include",
@@ -27,7 +27,7 @@ project "SDLRenderer"
 	filter "system:windows"
 		kind "SharedLib"
 		systemversion "latest"
-		links {"Core", "SDL2", "SDL2main", "SDL2_image"}
+		links {"Core", "SDL2", "SDL2main", "SDL2_image", "SDL2_ttf"}
 		defines "TURTLE_OS_WINDOWS"
 
 	filter "configurations:Debug"

@@ -1,13 +1,12 @@
 #pragma once
 #include "ec/Component.h"
 
-class TestComponent final : TurtleCore::Component
+class TestComponent final : public TurtleCore::Component
 {
 public:
-	TestComponent(TurtleCore::Entity* entity);
+	TestComponent();
 	~TestComponent() override;
 
-protected:
 	API_EXPORT void Initialize() override;
 	API_EXPORT void Start() override;
 	API_EXPORT void Update() override;

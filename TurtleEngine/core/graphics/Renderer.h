@@ -14,6 +14,8 @@ namespace TurtleCore
 		API_EXPORT virtual ~Renderer();
 
 		API_EXPORT virtual void Render() = 0;
+		API_EXPORT virtual void Clear() = 0;
 		API_EXPORT virtual void Destroy() = 0;
+		API_EXPORT virtual void* GetRenderer() = 0;
 	};
 }

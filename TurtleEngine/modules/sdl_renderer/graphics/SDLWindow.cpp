@@ -1,8 +1,9 @@
 #include "SDLWindow.h"
 #include <iostream>
+
+#include "Core.h"
 #include "SDL.h"
 #include "SDLRenderer.h"
-
 
 SDLWindow::SDLWindow() : Window(nullptr), Running(false)
 {
@@ -26,7 +27,7 @@ void SDLWindow::Initialize(bool& success, const char* title, int width, int heig
 		return;
 
 	std::cout << "SDL Renderer Created" << std::endl;
-	SDL_SetRenderDrawColor(Renderer.GetRenderer(), 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(static_cast<SDL_Renderer*>(Renderer.GetRenderer()), 0, 0, 0, 255);
 
 	Running = true;
 	success = true;
@@ -35,24 +36,40 @@ void SDLWindow::Initialize(bool& success, const char* title, int width, int heig
 void SDLWindow::HandleEvents()
 {
 	SDL_Event event;
-	SDL_PollEvent(&event);
 
-	switch (event.type)
+	while (SDL_PollEvent(&event))
 	{
-	case SDL_QUIT:
-	{
-		Running = false;
-		break;
-	}
-
-	default:
-		break;
+		switch (event.type)
+		{
+		case SDL_QUIT:
+		{
+			Running = false;
+			break;
+		}
+		case SDL_KEYDOWN:
+		{
+			Core->InputManager.Buffer.KeyDown(event.key.keysym.scancode);
+			break;
+		}
+		case SDL_KEYUP:
+		{
+			Core->InputManager.Buffer.KeyRelease(event.key.keysym.scancode);
+			break;
+		}
+		default:
+			break;
+		}
 	}
 }
 
 void SDLWindow::Render()
 {
 	Renderer.Render();
+}
+
+void SDLWindow::Clear()
+{
+	Renderer.Clear();
 }
 
 bool SDLWindow::IsRunning()
@@ -75,7 +92,12 @@ void SDLWindow::Destroy()
 	SDL_Quit();
 }
 
-SDL_Window* SDLWindow::GetWindow() const
+void* SDLWindow::GetWindow() const
 {
 	return Window;
+}
+
+void* SDLWindow::GetRenderer() 
+{
+	return &Renderer;
 }

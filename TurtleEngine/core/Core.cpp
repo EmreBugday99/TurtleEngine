@@ -1,16 +1,13 @@
 #include "Core.h"
 #include <iostream>
-#include "DummyClass.h"
 #include "ec/Entity.h"
 #include "event/CoreEvents.h"
 #include "event/EventData.h"
 #include "event/EventEnum.h"
+#include "SDL_ttf.h"
 
 TurtleCore::Core::Core() : Window(nullptr)
 {
-	DummyClass dummy;
-	dummy.PrintTypeName<Entity>();
-
 	CoreEvents::AddEvent(GenerateEngineEventId(EventEnum::BeforeCoreInitialize), &BeforeCoreInitialize);
 	CoreEvents::AddEvent(GenerateEngineEventId(EventEnum::AfterCoreInitialize), &AfterCoreInitialize);
 	CoreEvents::AddEvent(GenerateEngineEventId(EventEnum::AfterCoreStart), &AfterCoreStart);
@@ -29,6 +26,12 @@ void TurtleCore::Core::Initialize()
 {
 	BeforeCoreInitialize.Invoke(EventData("BeforeCoreInitialize", this));
 	ModuleManager.Initialize(this);
+
+	if (TTF_Init() == -1)
+	{
+		std::cout << "TTF Failed To Initialize!" << std::endl;
+		return;
+	}
 
 	ModuleManager.LoadAllModules();
 	AfterCoreInitialize.Invoke(EventData("AfterCoreInitialize", this));
@@ -73,6 +76,10 @@ void TurtleCore::Core::Update()
 {
 	while (Window->IsRunning())
 	{
+		Window->Clear();
+
+		Memory.StartComponents();
+		InputManager.UpdateKeys();
 		Window->HandleEvents();
 
 		for (int i = static_cast<int>(EntitiesInGame.size()) - 1; i >= 0; i--)

@@ -1,6 +1,6 @@
 #include "Component.h"
 
-TurtleCore::Component::Component(Entity* owner) :Owner(owner) {}
+TurtleCore::Component::Component() : Owner(nullptr) {}
 
 void TurtleCore::Component::Initialize()
 {
@@ -18,7 +18,7 @@ void TurtleCore::Component::Destroy()
 {
 }
 
-void TurtleCore::Component::GetEntity(const Entity* entity) const
+TurtleCore::Entity& TurtleCore::Component::GetEntity() const
 {
-	entity = Owner;
+	return *Owner;
 }

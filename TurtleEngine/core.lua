@@ -14,7 +14,7 @@ project "Core"
 		"core/**.cpp"
 	}
 
-	libdirs {"dependencies/sdl/lib"}
+	libdirs {"dependencies/sdl/lib", "dependencies/ftl/lib"}
 	includedirs 
 	{
 		"dependencies/sdl/include"
@@ -26,7 +26,7 @@ project "Core"
 	filter "system:windows"
 		kind "SharedLib"
 		systemversion "latest"
-		links {"SDL2", "SDL2main", "SDL2_image"}
+		links {"SDL2", "SDL2main", "SDL2_image", "SDL2_ttf"}
 		defines "TURTLE_OS_WINDOWS"
 
 	filter "configurations:Debug"
