@@ -55,9 +55,9 @@ void RendererModule::InitializeWindowCallback(const TurtleCore::EventData& data)
 
 	bool windowInitialized;
 	Window.Initialize(windowInitialized, "Test Window", 600, 600);
-	Window.Core = core;
 	if (windowInitialized == false)
 		return;
 
+	Window.Core = core;
 	core->Window = reinterpret_cast<TurtleCore::Window*>(&Window);
 }

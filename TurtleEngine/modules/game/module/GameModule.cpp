@@ -1,9 +1,8 @@
 #include "GameModule.h"
 #include "ec/Entity.h"
-#include "../component/TestComponent.h"
-#include "components/SpriteComponent.h"
 #include "components/TransformComponent.h"
 #include "ui/UIText.h"
+#include "Core.h"
 
 GameModule::GameModule() : TurtleModule("Game") {}
 GameModule::~GameModule() = default;
@@ -14,21 +13,16 @@ void GameModule::OnModuleUnload(TurtleCore::Core* core) {}
 
 void GameModule::OnModuleStart(TurtleCore::Core* core)
 {
-	TurtleCore::Entity& entity = core->CreateEntity();
+	TurtleCore::Entity& welcomeEntity = core->CreateEntity();
+	auto& welcomeTransorm = welcomeEntity.AddComponent<TurtleCore::TransformComponent>();
+	auto& welcomeText = welcomeEntity.AddComponent<TurtleCore::UIText>();
 
-	TurtleCore::TransformComponent& transform = entity.AddComponent<TurtleCore::TransformComponent>();
-	TestComponent& testComponent = entity.AddComponent<TestComponent>();
-	//TurtleCore::SpriteComponent& sprite = entity.AddComponent<TurtleCore::SpriteComponent>();
+	welcomeTransorm.Position.X = core->Window->Width / 2;
+	welcomeTransorm.Size.X = 128;
+	welcomeTransorm.Size.Y = 64;
 
-	//sprite.SetTexture("assets/boss.png");
-
-	//TurtleCore::Entity& UIEntity = core->CreateEntity();
-	//TurtleCore::TransformComponent& UITransform = UIEntity.AddComponent<TurtleCore::TransformComponent>();
-
-	//UITransform.Position.X = 0;
-	//UITransform.Position.Y = 0;
-	//UITransform.Size.X = 128;
-	//UITransform.Size.Y = 64;
-
-	//TurtleCore::UIText& text = UIEntity.AddComponent<TurtleCore::UIText>();
+	welcomeText.SetFont("assets/Roboto-Regular.ttf", 12);
+	welcomeText.SetColor({ 255, 0, 0, 255 });
+	welcomeText.SetText("Hello World");
+	welcomeText.UpdateText();
 }

@@ -29,6 +29,8 @@ void SDLWindow::Initialize(bool& success, const char* title, int width, int heig
 	std::cout << "SDL Renderer Created" << std::endl;
 	SDL_SetRenderDrawColor(static_cast<SDL_Renderer*>(Renderer.GetRenderer()), 0, 0, 0, 255);
 
+	Width = width;
+	Height = height;
 	Running = true;
 	success = true;
 }
