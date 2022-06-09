@@ -3,7 +3,6 @@
 #include <SDL_ttf.h>
 #include "../ec/Component.h"
 #include "../ec/Entity.h"
-#include "../components/TransformComponent.h"
 #include "../graphics/Renderer.h"
 
 void TurtleCore::UIText::Initialize()
@@ -11,17 +10,12 @@ void TurtleCore::UIText::Initialize()
 	FontTexture = nullptr;
 	Font = nullptr;
 	Color = { 255, 255, 255 ,255 };
-	Transform = nullptr;
 	Text = "Text";
 	SdlRenderer = nullptr;
 }
 
 void TurtleCore::UIText::Start()
 {
-	Transform = Owner->GetComponent<TransformComponent>();
-	if (Transform == nullptr)
-		std::cout << "UI Text Needs Transform Component To Function Properly" << std::endl;
-
 	Renderer* renderer = static_cast<Renderer*>(Owner->GetEngine()->Window->GetRenderer());
 	SdlRenderer = static_cast<SDL_Renderer*>(renderer->GetRenderer());
 }

@@ -3,21 +3,31 @@
 #include "components/TransformComponent.h"
 #include "ui/UIText.h"
 #include "Core.h"
+#include "../SecretKey.h"
+#include "../component/WelcomeComponent.h"
 
 GameModule::GameModule() : TurtleModule("Game") {}
 GameModule::~GameModule() = default;
 
-void GameModule::OnModuleLoad(TurtleCore::Core* core) {}
+void GameModule::OnModuleLoad(TurtleCore::Core* core)
+{
+	using namespace Microsoft::CognitiveServices::Speech;
+	using namespace Microsoft::CognitiveServices::Speech::Audio;
+
+	SpeechConfig = SpeechConfig::FromSubscription(SubscriptionKey, ServiceRegion);
+	SpeechConfig->SetSpeechRecognitionLanguage("en-US");
+	SpeechConfig->SetSpeechSynthesisVoiceName("en-US-JennyNeural");
+
+	AudioConfig = AudioConfig::FromDefaultMicrophoneInput();
+	Recognizer = SpeechRecognizer::FromConfig(SpeechConfig, AudioConfig);
+
+	Synthesizer = SpeechSynthesizer::FromConfig(SpeechConfig);
+}
 
 void GameModule::OnModuleUnload(TurtleCore::Core* core) {}
 
 void GameModule::OnModuleStart(TurtleCore::Core* core)
 {
 	TurtleCore::Entity& welcomeEntity = core->CreateEntity();
-	auto& welcomeText = welcomeEntity.AddComponent<TurtleCore::UIText>();
-
-	welcomeText.SetFont("assets/Roboto-Regular.ttf", 24);
-	welcomeText.SetColor({ 255, 0, 0, 255 });
-	welcomeText.SetText("Please say 'Start Game' to start the game...");
-	welcomeText.UpdateText();
+	welcomeEntity.AddComponent<WelcomeComponent>();
 }

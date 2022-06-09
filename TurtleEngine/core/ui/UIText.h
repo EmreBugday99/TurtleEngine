@@ -9,8 +9,6 @@ struct SDL_Renderer;
 
 namespace TurtleCore
 {
-	class TransformComponent;
-
 	class UIText : public Component
 	{
 	public:
@@ -25,8 +23,6 @@ namespace TurtleCore
 		const char* Text;
 
 		SDL_Renderer* SdlRenderer;
-		TransformComponent* Transform;
-
 	public:
 		API_EXPORT void Initialize() override;
 		API_EXPORT void Start() override;
