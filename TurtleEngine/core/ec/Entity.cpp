@@ -14,9 +14,14 @@ void TurtleCore::Entity::Start()
 
 void TurtleCore::Entity::Update()
 {
-	for (int i = static_cast<int>(Components.size()) - 1; i >= 0; i--)
+	int componentIndex = static_cast<int>(Components.size());
+	while (componentIndex)
 	{
-		Components[i]->Update();
+		if (MarkedForGC)
+			break;
+
+		componentIndex--;
+		Components[componentIndex]->Update();
 	}
 }
 
