@@ -35,11 +35,7 @@ void TurtleCore::UIText::Update()
 	}
 
 	SDL_Rect destinationRect;
-	if (Transform != nullptr)
-		destinationRect = { Transform->Position.X, Transform->Position.Y, Transform->Size.X, Transform->Size.Y };
-	else
-		destinationRect = { 0, 0, 64, 128 };
-
+	destinationRect = { Position.X, Position.Y, Size.X, Size.Y };
 	SDL_RenderCopy(SdlRenderer, FontTexture, nullptr, &destinationRect);
 }
 
@@ -89,10 +85,11 @@ void TurtleCore::UIText::UpdateText()
 	const SDL_Color color = { static_cast<uint8_t>(Color.X), static_cast<uint8_t>(Color.Y), static_cast<uint8_t>(Color.Z), static_cast<uint8_t>(Color.W) };
 
 	SDL_Surface* fontSurface = TTF_RenderUTF8_Solid(Font, Text, color);
+	Size.X = fontSurface->w;
+	Size.Y = fontSurface->h;
 	if (fontSurface == nullptr)
 	{
 		std::cout << "Failed to create Surface for the UI Text" << std::endl;
-		SDL_FreeSurface(fontSurface);
 		return;
 	}
 
@@ -103,4 +100,6 @@ void TurtleCore::UIText::UpdateText()
 		SDL_FreeSurface(fontSurface);
 		return;
 	}
+
+	SDL_FreeSurface(fontSurface);
 }
