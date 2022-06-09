@@ -51,6 +51,7 @@ void WelcomeComponent::Update()
 void WelcomeComponent::Destroy()
 {
 	ContinueSpeechRecognition = false;
+	SpeechFutures.clear();
 }
 
 void WelcomeComponent::SpeakText(GameModule* gameModule, const char* speechText)

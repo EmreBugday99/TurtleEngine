@@ -32,6 +32,7 @@ void TurtleCore::ECMemory::StartComponents()
 void TurtleCore::ECMemory::MarkObjectForGC(TurtleObject* objectToRemove)
 {
 	ObjectsToGarbageCollect.push_back(objectToRemove);
+	objectToRemove->MarkedForGC = true;
 }
 
 void TurtleCore::ECMemory::CollectGarbage()

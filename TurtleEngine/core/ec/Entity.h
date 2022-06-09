@@ -77,9 +77,10 @@ namespace TurtleCore
 				if (typeInfoOne != typeInfoTwo)
 					continue;
 
-				Components.erase(Components.begin() + i);
 				Components[i]->Destroy();
-				Engine->GetMemory().MarkObjectForGC(reinterpret_cast<TurtleObject*>(Components[i]));
+				Engine->GetMemory().MarkObjectForGC(Components[i]);
+
+				Components.erase(Components.begin() + i);
 			}
 		}
 	};

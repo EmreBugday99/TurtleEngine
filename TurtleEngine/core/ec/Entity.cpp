@@ -25,6 +25,7 @@ void TurtleCore::Entity::Destroy()
 	for (Component* component : Components)
 	{
 		Engine->GetMemory().MarkObjectForGC(component);
+		component->Destroy();
 	}
 	Components.clear();
 	Components.shrink_to_fit();

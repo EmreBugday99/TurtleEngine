@@ -3,7 +3,7 @@
 
 int TurtleCore::TurtleObject::Count = 0;
 
-TurtleCore::TurtleObject::TurtleObject()
+TurtleCore::TurtleObject::TurtleObject() : MarkedForGC(false)
 {
 	Count++;
 	std::cout << "TO Count: " << Count << std::endl;
