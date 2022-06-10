@@ -6,6 +6,8 @@
 #include "module/ModuleManager.h"
 #include "..\module\LevelModule.h"
 #include <speechapi_cxx.h>
+#include "components\TransformComponent.h"
+#include "components\SpriteComponent.h"
 
 PlayerComponent::~PlayerComponent() = default;
 
@@ -40,11 +42,36 @@ void PlayerComponent::Start()
 
 void PlayerComponent::Update()
 {
+	TurtleCore::TransformComponent* transform = Owner->GetComponent<TurtleCore::TransformComponent>();
+
 	if (RecognizedSpeech == "Start game.")
 	{
 		Owner->Destroy();
 		return;
 	}
+	else if (RecognizedSpeech == "Move up.")
+	{
+		transform->Position.Y -= 25;
+	}
+	else if (RecognizedSpeech == "Move down.")
+	{
+		transform->Position.Y += 25;
+	}
+	else if (RecognizedSpeech == "Move right.")
+	{
+		transform->Position.X += 25;
+	}
+	else if (RecognizedSpeech == "Move left.")
+	{
+		transform->Position.X -= 25;
+	}
+	else if (RecognizedSpeech == "Ability one.")
+	{
+		auto sprite = Owner->GetComponent<TurtleCore::SpriteComponent>();
+		sprite->SetTexture("assets/enemy.png");
+	}
+
+	RecognizedSpeech = "";
 }
 
 void PlayerComponent::Destroy()

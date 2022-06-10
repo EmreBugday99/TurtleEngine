@@ -56,17 +56,8 @@ void GameModule::OnModuleUnload(TurtleCore::Core* core)
 
 void GameModule::OnModuleStart(TurtleCore::Core* core)
 {
-	//TurtleCore::Entity& welcomeEntity = core->CreateEntity();
-	//welcomeEntity.AddComponent<WelcomeComponent>();
+	TurtleCore::Entity& welcomeEntity = core->CreateEntity();
+	welcomeEntity.AddComponent<WelcomeComponent>();
 
-	TurtleCore::Entity& playerEntity = core->CreateEntity();
-	TurtleCore::TransformComponent& playerTransform = playerEntity.AddComponent<TurtleCore::TransformComponent>();
-	TurtleCore::SpriteComponent& playerSprite = playerEntity.AddComponent<TurtleCore::SpriteComponent>();
-	playerSprite.SetTexture("player.png");
-
-	playerTransform.Size.Set(24);
-
-
-	//Entities.push_back(&welcomeEntity);
-	Entities.push_back(&playerEntity);
+	Entities.push_back(&welcomeEntity);
 }

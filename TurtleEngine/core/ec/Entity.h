@@ -29,15 +29,18 @@ namespace TurtleCore
 		API_EXPORT void Destroy() override;
 
 		template<typename T>
-		API_EXPORT bool HasComponent() const
+		API_EXPORT void HasComponent(bool& hasComponent) const
 		{
+			hasComponent = false;
+
 			for (Component* component : Components)
 			{
 				if (typeid(T) == typeid(component))
-					return true;
+				{
+					hasComponent = true;
+					break;
+				}
 			}
-
-			return false;
 		}
 
 		template<typename T>

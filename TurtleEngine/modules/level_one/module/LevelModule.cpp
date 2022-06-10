@@ -36,8 +36,10 @@ void LevelModule::OnModuleStart(TurtleCore::Core* core)
 	TurtleCore::Entity& playerEntity = core->CreateEntity();
 	TurtleCore::TransformComponent& playerTransform = playerEntity.AddComponent<TurtleCore::TransformComponent>();
 	playerEntity.AddComponent<PlayerComponent>();
-	TurtleCore::SpriteComponent playerSprite = playerEntity.AddComponent<TurtleCore::SpriteComponent>();
+	TurtleCore::SpriteComponent& playerSprite = playerEntity.AddComponent<TurtleCore::SpriteComponent>();
 	playerSprite.SetTexture("assets/player.png");
 
-	playerTransform.Size.Set(5);
+	playerTransform.Position.X = 25;
+	playerTransform.Position.Y = 100;
+	playerTransform.Size.Set(50);
 }
