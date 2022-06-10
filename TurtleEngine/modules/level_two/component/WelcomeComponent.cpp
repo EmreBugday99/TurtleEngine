@@ -4,13 +4,10 @@
 #include "ui\UIText.h"
 #include "Core.h"
 #include "module/ModuleManager.h"
-#include "..\module\GameModule.h"
+#include "..\module\LevelModule.h"
 #include <speechapi_cxx.h>
 
-WelcomeComponent::~WelcomeComponent()
-{
-	std::cout << "Welcome deleted" << std::endl;
-};
+WelcomeComponent::~WelcomeComponent() = default;
 
 void WelcomeComponent::Initialize()
 {
@@ -29,12 +26,12 @@ void WelcomeComponent::Start()
 {
 	TurtleCore::Core* core = Owner->GetEngine();
 	bool hasGameModule;
-	core->ModuleManager.HasModule("Game", hasGameModule);
+	core->ModuleManager.HasModule("LevelTwo", hasGameModule);
 	if (hasGameModule == false)
 		return;
 
 	bool getModuleResult;
-	Module = (GameModule*)core->ModuleManager.GetModule("Game", getModuleResult);
+	Module = (LevelModule*)core->ModuleManager.GetModule("LevelTwo", getModuleResult);
 	if (getModuleResult == false)
 		return;
 
@@ -46,12 +43,7 @@ void WelcomeComponent::Update()
 {
 	if (RecognizedSpeech == "Start game.")
 	{
-		ContinueSpeechRecognition = false;
-		RecognitionFuture.wait();
-
-		bool removedSuccessfuly;
-		Owner->GetEngine()->ModuleManager.RemoveModule("Game", removedSuccessfuly);
-
+		Owner->Destroy();
 		return;
 	}
 }
@@ -62,12 +54,12 @@ void WelcomeComponent::Destroy()
 	SpeechFutures.clear();
 }
 
-void WelcomeComponent::SpeakText(GameModule* gameModule, const char* speechText)
+void WelcomeComponent::SpeakText(LevelModule* levelModule, const char* speechText)
 {
-	gameModule->Synthesizer->SpeakTextAsync(speechText).get();
+	levelModule->Synthesizer->SpeakTextAsync(speechText).get();
 }
 
-void WelcomeComponent::RecognizeSpeech(GameModule* gameModule, WelcomeComponent* welcomeComponent)
+void WelcomeComponent::RecognizeSpeech(LevelModule* levelModule, WelcomeComponent* welcomeComponent)
 {
 	using namespace Microsoft::CognitiveServices::Speech;
 	using namespace Microsoft::CognitiveServices::Speech::Audio;
@@ -76,7 +68,7 @@ void WelcomeComponent::RecognizeSpeech(GameModule* gameModule, WelcomeComponent*
 	while (welcomeComponent->ContinueSpeechRecognition)
 	{
 		std::cout << "Provide Input" << std::endl;
-		auto result = gameModule->Recognizer->RecognizeOnceAsync().get();
+		auto result = levelModule->Recognizer->RecognizeOnceAsync().get();
 		if (result->Reason == ResultReason::RecognizedSpeech)
 			welcomeComponent->RecognizedSpeech = result->Text;
 	}

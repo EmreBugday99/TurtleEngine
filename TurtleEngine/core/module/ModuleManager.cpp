@@ -95,20 +95,30 @@ TurtleCore::TurtleModule* TurtleCore::ModuleManager::GetModule(const char* modul
 	return nullptr;
 }
 
-void TurtleCore::ModuleManager::LoadAllModules() const
+void TurtleCore::ModuleManager::LoadAllModules()
 {
 	for (TurtleModule* turtleModule : Modules)
 	{
+		bool isCustomModule;
+		IsCustomModule(turtleModule, isCustomModule);
+		if (isCustomModule)
+			continue;
+
 		turtleModule->OnModuleLoad(Engine);
 
 		ModuleLoadEvent.Invoke(EventData("ModuleLoad", turtleModule));
 	}
 }
 
-void TurtleCore::ModuleManager::StartAllModules() const
+void TurtleCore::ModuleManager::StartAllModules()
 {
 	for (TurtleModule* turtleModule : Modules)
 	{
+		bool isCustomModule;
+		IsCustomModule(turtleModule, isCustomModule);
+		if (isCustomModule)
+			continue;
+
 		turtleModule->OnModuleStart(Engine);
 		ModuleStartEvent.Invoke(EventData("ModuleStart", turtleModule));
 	}
@@ -118,8 +128,20 @@ void TurtleCore::ModuleManager::UnloadAllModules()
 {
 	for (TurtleModule* turtleModule : Modules)
 	{
+		bool isCustomModule;
+		IsCustomModule(turtleModule, isCustomModule);
+		if (isCustomModule)
+			continue;
+
 		bool success = false;
 		RemoveModule(turtleModule->ModuleName, success);
 		//TODO: Handle failed module unloading
 	}
+}
+
+void TurtleCore::ModuleManager::IsCustomModule(TurtleModule* turtleModule, bool& result)
+{
+	result = false;
+	if (turtleModule->ModuleType == ModuleTypes::CustomModule)
+		result = true;
 }

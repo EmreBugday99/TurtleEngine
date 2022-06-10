@@ -2,7 +2,10 @@
 
 TurtleCore::Entity::Entity(Core* core) : Engine(core) {}
 
-TurtleCore::Entity::~Entity() = default;
+TurtleCore::Entity::~Entity()
+{
+	std::cout << "Entity deleted" << std::endl;
+};
 
 void TurtleCore::Entity::Initialize()
 {

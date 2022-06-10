@@ -1,5 +1,6 @@
 #pragma once
 #include "../API.h"
+#include "ModuleType.h"
 
 namespace TurtleCore
 {
@@ -9,6 +10,7 @@ namespace TurtleCore
 	{
 	public:
 		const char* ModuleName;
+		ModuleTypes ModuleType;
 
 	public:
 		TurtleModule(const char* moduleName);

@@ -1,11 +1,8 @@
 #pragma once
 #include "module/TurtleModule.h"
 #include <speechapi_cxx.h>
-#include <vector>
 
-namespace TurtleCore { class Entity; }
-
-class GameModule : TurtleCore::TurtleModule
+class LevelModule : TurtleCore::TurtleModule
 {
 public:
 	std::shared_ptr<Microsoft::CognitiveServices::Speech::SpeechConfig> SpeechConfig;
@@ -13,10 +10,8 @@ public:
 	std::shared_ptr<Microsoft::CognitiveServices::Speech::SpeechRecognizer> Recognizer;
 	std::shared_ptr<Microsoft::CognitiveServices::Speech::SpeechSynthesizer> Synthesizer;
 
-	std::vector<TurtleCore::Entity*> Entities;
-
-	GameModule();
-	~GameModule() override;
+	LevelModule();
+	~LevelModule() override;
 
 	void OnModuleLoad(TurtleCore::Core* core) override;
 	void OnModuleUnload(TurtleCore::Core* core) override;

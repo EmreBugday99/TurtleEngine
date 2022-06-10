@@ -5,8 +5,13 @@
 #include "Core.h"
 #include "../SecretKey.h"
 #include "../component/WelcomeComponent.h"
+#include "components/SpriteComponent.h"
 
-GameModule::GameModule() : TurtleModule("Game") {}
+GameModule::GameModule() : TurtleModule("Game")
+{
+	ModuleType = TurtleCore::ModuleTypes::GameModule;
+}
+
 GameModule::~GameModule() = default;
 
 void GameModule::OnModuleLoad(TurtleCore::Core* core)
@@ -24,10 +29,44 @@ void GameModule::OnModuleLoad(TurtleCore::Core* core)
 	Synthesizer = SpeechSynthesizer::FromConfig(SpeechConfig);
 }
 
-void GameModule::OnModuleUnload(TurtleCore::Core* core) {}
+void GameModule::OnModuleUnload(TurtleCore::Core* core)
+{
+	for (TurtleCore::Entity* entity : Entities)
+	{
+		entity->Destroy();
+	}
+
+	Entities.clear();
+	Entities.shrink_to_fit();
+
+	core->GetMemory().CollectGarbage();
+
+	bool success = false;
+	core->ModuleManager.HasModule("LevelOne", success);
+	if (!success) return;
+	
+	TurtleModule* levelOne = core->ModuleManager.GetModule("LevelOne", success);
+	if (!success) return;
+
+	std::cout << "Loading Level One..." << std::endl;
+
+	levelOne->OnModuleLoad(core);
+	levelOne->OnModuleStart(core);
+}
 
 void GameModule::OnModuleStart(TurtleCore::Core* core)
 {
-	TurtleCore::Entity& welcomeEntity = core->CreateEntity();
-	welcomeEntity.AddComponent<WelcomeComponent>();
+	//TurtleCore::Entity& welcomeEntity = core->CreateEntity();
+	//welcomeEntity.AddComponent<WelcomeComponent>();
+
+	TurtleCore::Entity& playerEntity = core->CreateEntity();
+	TurtleCore::TransformComponent& playerTransform = playerEntity.AddComponent<TurtleCore::TransformComponent>();
+	TurtleCore::SpriteComponent& playerSprite = playerEntity.AddComponent<TurtleCore::SpriteComponent>();
+	playerSprite.SetTexture("player.png");
+
+	playerTransform.Size.Set(24);
+
+
+	//Entities.push_back(&welcomeEntity);
+	Entities.push_back(&playerEntity);
 }

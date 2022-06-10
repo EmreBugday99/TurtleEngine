@@ -16,6 +16,7 @@ namespace TurtleCore
 		TransformComponent* Transform;
 
 	public:
+		API_EXPORT ~SpriteComponent() override;
 		API_EXPORT void Initialize() override;
 		API_EXPORT void Start() override;
 		API_EXPORT void Update() override;

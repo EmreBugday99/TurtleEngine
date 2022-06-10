@@ -10,6 +10,7 @@ namespace TurtleCore
 		Vector2Int Position;
 		Vector2Int Size;
 
+		API_EXPORT ~TransformComponent() override;
 		API_EXPORT void Initialize() override;
 		API_EXPORT void Start() override;
 		API_EXPORT void Update() override;

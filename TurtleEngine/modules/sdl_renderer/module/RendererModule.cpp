@@ -11,6 +11,8 @@ RendererModule::RendererModule() : TurtleModule("SDL Renderer")
 {
 	AfterCoreInitialize.BindCallback
 	([&](const TurtleCore::EventData& data) { InitializeWindowCallback(data); });
+
+	ModuleType = TurtleCore::ModuleTypes::CoreModule;
 }
 
 RendererModule::~RendererModule()
