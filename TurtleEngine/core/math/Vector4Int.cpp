@@ -67,6 +67,38 @@ void TurtleCore::Vector4Int::operator/=(const Vector4Int& other)
 	(*this) / other;
 }
 
+void TurtleCore::Vector4Int::operator+=(const int& value)
+{
+	(*this).X += value;
+	(*this).Y += value;
+	(*this).Z += value;
+	(*this).W += value;
+}
+
+void TurtleCore::Vector4Int::operator-=(const int& value)
+{
+	(*this).X -= value;
+	(*this).Y -= value;
+	(*this).Z -= value;
+	(*this).W -= value;
+}
+
+void TurtleCore::Vector4Int::operator*=(const int& value)
+{
+	(*this).X *= value;
+	(*this).Y *= value;
+	(*this).Z *= value;
+	(*this).W *= value;
+}
+
+void TurtleCore::Vector4Int::operator/=(const int& value)
+{
+	(*this).X /= value;
+	(*this).Y /= value;
+	(*this).Z /= value;
+	(*this).W /= value;
+}
+
 void TurtleCore::Vector4Int::Set(const Vector4Int& other)
 {
 	X = other.X;

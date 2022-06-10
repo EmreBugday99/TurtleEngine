@@ -21,34 +21,6 @@ void SDLRenderer::Initialize(bool& success, SDLWindow* window)
 
 void SDLRenderer::Render()
 {
-	//if (TTF_Init() != 0)
-	//{
-	//	std::cout << "Failed to Initialize TTF" << std::endl;
-	//	return;
-	//}
-
-	//TTF_Font* testFont = TTF_OpenFont("assets/Roboto-Regular.ttf", 16);
-	//if (testFont == nullptr)
-	//{
-	//	std::cout << "It aint working" << std::endl;
-	//}
-
-	//SDL_Color fontColor = { 255, 0, 0, 255 };
-
-	//std::string a = "Number: ";
-	//SDL_Surface* fontSurface = TTF_RenderUTF8_Solid(testFont, a.c_str(), fontColor);
-	//SDL_Rect destRect;
-	//destRect.h = 64;
-	//destRect.w = 128;
-	//destRect.y = 100;
-
-	//SDL_Texture* fontTexture = SDL_CreateTextureFromSurface(Renderer, fontSurface);
-	//SDL_RenderCopy(Renderer, fontTexture, nullptr, &destRect);
-
-	//TTF_CloseFont(testFont);
-	//SDL_DestroyTexture(fontTexture);
-	//SDL_FreeSurface(fontSurface);
-
 	SDL_RenderPresent(Renderer);
 }
 

@@ -10,6 +10,7 @@ class GameModule : TurtleCore::TurtleModule
 public:
 	std::shared_ptr<Microsoft::CognitiveServices::Speech::SpeechConfig> SpeechConfig;
 	std::shared_ptr<Microsoft::CognitiveServices::Speech::Audio::AudioConfig> AudioConfig;
+	std::shared_ptr<Microsoft::CognitiveServices::Speech::Audio::AudioConfig> SynthesizerAudioConfig;
 	std::shared_ptr<Microsoft::CognitiveServices::Speech::SpeechRecognizer> Recognizer;
 	std::shared_ptr<Microsoft::CognitiveServices::Speech::SpeechSynthesizer> Synthesizer;
 

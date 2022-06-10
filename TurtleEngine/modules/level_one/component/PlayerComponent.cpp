@@ -8,6 +8,8 @@
 #include <speechapi_cxx.h>
 #include "components\TransformComponent.h"
 #include "components\SpriteComponent.h"
+#include "event\CoreEvents.h"
+#include "event\EventData.h"
 
 PlayerComponent::~PlayerComponent() = default;
 
@@ -15,12 +17,14 @@ void PlayerComponent::Initialize()
 {
 	ContinueSpeechRecognition = true;
 
-	auto& welcomeText = Owner->AddComponent<TurtleCore::UIText>();
+	auto& levelText = Owner->AddComponent<TurtleCore::UIText>();
 
-	welcomeText.SetFont("assets/Roboto-Regular.ttf", 24);
-	welcomeText.SetColor({ 255, 0, 0, 255 });
-	welcomeText.SetText("Level One");
-	welcomeText.UpdateText();
+	levelText.SetFont("assets/Roboto-Regular.ttf", 24);
+	levelText.SetColor({ 255, 0, 0, 255 });
+	levelText.SetText("Level One");
+	levelText.UpdateText();
+
+	TurtleCore::CoreEvents::AddEvent("PlayerAction", &PlayerActionEvent);
 }
 
 void PlayerComponent::Start()
@@ -42,33 +46,37 @@ void PlayerComponent::Start()
 
 void PlayerComponent::Update()
 {
-	TurtleCore::TransformComponent* transform = Owner->GetComponent<TurtleCore::TransformComponent>();
+	auto* transform = Owner->GetComponent<TurtleCore::TransformComponent>();
 
-	if (RecognizedSpeech == "Start game.")
-	{
-		Owner->Destroy();
-		return;
-	}
-	else if (RecognizedSpeech == "Move up.")
+	if (RecognizedSpeech == "Move up.")
 	{
 		transform->Position.Y -= 25;
+		PlayerActionEvent.Invoke(TurtleCore::EventData("Move up", this));
 	}
 	else if (RecognizedSpeech == "Move down.")
 	{
 		transform->Position.Y += 25;
+		PlayerActionEvent.Invoke(TurtleCore::EventData("Move down", this));
 	}
 	else if (RecognizedSpeech == "Move right.")
 	{
 		transform->Position.X += 25;
+		PlayerActionEvent.Invoke(TurtleCore::EventData("Move right", this));
 	}
 	else if (RecognizedSpeech == "Move left.")
 	{
 		transform->Position.X -= 25;
+		PlayerActionEvent.Invoke(TurtleCore::EventData("Move left", this));
 	}
-	else if (RecognizedSpeech == "Ability one.")
+	else if (RecognizedSpeech == "Stay put.")
 	{
-		auto sprite = Owner->GetComponent<TurtleCore::SpriteComponent>();
-		sprite->SetTexture("assets/enemy.png");
+		transform->Position.X -= 25;
+		PlayerActionEvent.Invoke(TurtleCore::EventData("Stay put", this));
+	}
+
+	if (RecognizedSpeech.empty() == false)
+	{
+		std::cout << "Recognized Command: " << RecognizedSpeech << std::endl;
 	}
 
 	RecognizedSpeech = "";

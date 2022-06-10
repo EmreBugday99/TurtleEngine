@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <future>
+#include "event/Event.h"
 
 class LevelModule;
 class PlayerComponent final : public TurtleCore::Component
@@ -14,6 +15,7 @@ private:
 	std::vector<std::future<void>> SpeechFutures;
 	std::future<void> RecognitionFuture;
 
+	TurtleCore::Event PlayerActionEvent;
 public:
 	bool ContinueSpeechRecognition;
 	~PlayerComponent() override;

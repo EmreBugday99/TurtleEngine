@@ -6,6 +6,7 @@
 #include "../SecretKey.h"
 #include "../component/PlayerComponent.h"
 #include "components/SpriteComponent.h"
+#include "../component/EnemyComponent.h"
 
 LevelModule::LevelModule() : TurtleModule("LevelOne")
 {
@@ -33,13 +34,26 @@ void LevelModule::OnModuleUnload(TurtleCore::Core* core) {}
 
 void LevelModule::OnModuleStart(TurtleCore::Core* core)
 {
-	TurtleCore::Entity& playerEntity = core->CreateEntity();
-	TurtleCore::TransformComponent& playerTransform = playerEntity.AddComponent<TurtleCore::TransformComponent>();
-	playerEntity.AddComponent<PlayerComponent>();
-	TurtleCore::SpriteComponent& playerSprite = playerEntity.AddComponent<TurtleCore::SpriteComponent>();
-	playerSprite.SetTexture("assets/player.png");
+	{
+		TurtleCore::Entity& playerEntity = core->CreateEntity();
+		auto& playerTransform = playerEntity.AddComponent<TurtleCore::TransformComponent>();
+		playerEntity.AddComponent<PlayerComponent>();
+		auto& playerSprite = playerEntity.AddComponent<TurtleCore::SpriteComponent>();
+		playerSprite.SetTexture("assets/player.png");
 
-	playerTransform.Position.X = 25;
-	playerTransform.Position.Y = 100;
-	playerTransform.Size.Set(50);
+		playerTransform.Position.X = 25;
+		playerTransform.Position.Y = 100;
+		playerTransform.Size.Set(50);
+	}
+
+	{
+		TurtleCore::Entity& enemyEntity = core->CreateEntity();
+		auto& enemyTransform = enemyEntity.AddComponent<TurtleCore::TransformComponent>();
+		auto& enemySprite = enemyEntity.AddComponent<TurtleCore::SpriteComponent>();
+		enemyEntity.AddComponent<EnemyComponent>();
+
+		enemyTransform.Position.Set(10);
+		enemyTransform.Size.Set(25);
+		enemySprite.SetTexture("assets/enemy.png");
+	}
 }

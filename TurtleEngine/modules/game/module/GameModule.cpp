@@ -26,7 +26,8 @@ void GameModule::OnModuleLoad(TurtleCore::Core* core)
 	AudioConfig = AudioConfig::FromDefaultMicrophoneInput();
 	Recognizer = SpeechRecognizer::FromConfig(SpeechConfig, AudioConfig);
 
-	Synthesizer = SpeechSynthesizer::FromConfig(SpeechConfig);
+	SynthesizerAudioConfig = AudioConfig::FromDefaultSpeakerOutput();
+	Synthesizer = SpeechSynthesizer::FromConfig(SpeechConfig, SynthesizerAudioConfig);
 }
 
 void GameModule::OnModuleUnload(TurtleCore::Core* core)
