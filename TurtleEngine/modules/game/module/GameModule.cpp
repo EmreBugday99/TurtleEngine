@@ -1,11 +1,8 @@
 #include "GameModule.h"
 #include "ec/Entity.h"
-#include "components/TransformComponent.h"
-#include "ui/UIText.h"
 #include "Core.h"
-#include "../SecretKey.h"
-#include "../component/WelcomeComponent.h"
-#include "components/SpriteComponent.h"
+#include "scene/SceneManager.h"
+#include "../scenes/TestScene.h"
 
 GameModule::GameModule() : TurtleModule("Game")
 {
@@ -16,49 +13,21 @@ GameModule::~GameModule() = default;
 
 void GameModule::OnModuleLoad(TurtleCore::Core* core)
 {
-	using namespace Microsoft::CognitiveServices::Speech;
-	using namespace Microsoft::CognitiveServices::Speech::Audio;
-
-	SpeechConfig = SpeechConfig::FromSubscription(SubscriptionKey, ServiceRegion);
-	SpeechConfig->SetSpeechRecognitionLanguage("en-US");
-	SpeechConfig->SetSpeechSynthesisVoiceName("en-US-JennyNeural");
-
-	AudioConfig = AudioConfig::FromDefaultMicrophoneInput();
-	Recognizer = SpeechRecognizer::FromConfig(SpeechConfig, AudioConfig);
-
-	SynthesizerAudioConfig = AudioConfig::FromDefaultSpeakerOutput();
-	Synthesizer = SpeechSynthesizer::FromConfig(SpeechConfig, SynthesizerAudioConfig);
+	std::cout << "Turtle Module: [" << ModuleName << "] Loaded" << std::endl;
 }
 
 void GameModule::OnModuleUnload(TurtleCore::Core* core)
 {
-	for (TurtleCore::Entity* entity : Entities)
-	{
-		entity->Destroy();
-	}
+	bool validScene;
+	TurtleCore::Scene& activeScene = core->SceneManager.GetActiveScene(validScene);
+	if (validScene)
+		activeScene.GetMemory().CollectGarbage();
 
-	Entities.clear();
-	Entities.shrink_to_fit();
-
-	core->GetMemory().CollectGarbage();
-
-	bool success = false;
-	core->ModuleManager.HasModule("LevelOne", success);
-	if (!success) return;
-	
-	TurtleModule* levelOne = core->ModuleManager.GetModule("LevelOne", success);
-	if (!success) return;
-
-	std::cout << "Loading Level One..." << std::endl;
-
-	levelOne->OnModuleLoad(core);
-	levelOne->OnModuleStart(core);
+	std::cout << "Turtle Module: [" << ModuleName << "] Unloaded" << std::endl;
 }
 
 void GameModule::OnModuleStart(TurtleCore::Core* core)
 {
-	TurtleCore::Entity& welcomeEntity = core->CreateEntity();
-	welcomeEntity.AddComponent<WelcomeComponent>();
-
-	Entities.push_back(&welcomeEntity);
+	auto& testScene = core->SceneManager.LoadScene<TestScene>();
+	std::cout << "Turtle Module: [" << ModuleName << "] Started" << std::endl;
 }

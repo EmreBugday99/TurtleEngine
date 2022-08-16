@@ -31,6 +31,7 @@ void RendererModule::OnModuleLoad(TurtleCore::Core* core)
 	}
 
 	coreEvent->AddListener(&AfterCoreInitialize);
+	std::cout << "Turtle Module: [" << ModuleName << "] Loaded" << std::endl;
 }
 
 void RendererModule::OnModuleUnload(TurtleCore::Core* core)
@@ -42,7 +43,10 @@ void RendererModule::OnModuleUnload(TurtleCore::Core* core)
 	core->Window = nullptr;
 }
 
-void RendererModule::OnModuleStart(TurtleCore::Core* core) {}
+void RendererModule::OnModuleStart(TurtleCore::Core* core)
+{
+	std::cout << "Turtle Module: [" << ModuleName << "] Started" << std::endl;
+}
 
 void RendererModule::InitializeWindowCallback(const TurtleCore::EventData& data)
 {

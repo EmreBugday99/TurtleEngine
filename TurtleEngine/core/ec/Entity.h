@@ -11,10 +11,12 @@ namespace TurtleCore
 	class Entity : TurtleObject
 	{
 	private:
-		friend class Core;
+		friend class Scene;
 		friend class ECMemory;
 
 		std::vector<Component*> Components;
+		std::vector<Component*> ComponentsToStart;
+
 		Core* Engine;
 
 		Entity(Core* core);
@@ -63,7 +65,7 @@ namespace TurtleCore
 		{
 			T* component = new T();
 			component->Owner = this;
-			Engine->GetMemory().ComponentWaitingToStart.push_back(reinterpret_cast<Component*>(component));
+			ComponentsToStart.push_back(component);
 
 			component->Initialize();
 			return *component;
@@ -81,7 +83,11 @@ namespace TurtleCore
 					continue;
 
 				Components[i]->Destroy();
-				Engine->GetMemory().MarkObjectForGC(Components[i]);
+
+				bool validScene;
+				Scene& activeScene = Engine->SceneManager.GetActiveScene(validScene);
+				if (validScene)
+					activeScene.GetMemory().MarkObjectForGC(Components[i]);
 
 				Components.erase(Components.begin() + i);
 			}

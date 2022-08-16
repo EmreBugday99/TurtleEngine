@@ -8,15 +8,12 @@
 
 TurtleCore::SpriteComponent::~SpriteComponent()
 {
-	std::cout << "Sprite deleted" << std::endl;
 }
 
 void TurtleCore::SpriteComponent::Initialize()
 {
 	Texture = nullptr;
 	SdlRenderer = nullptr;
-
-	std::cout << "Sprite Initialized" << std::endl;
 }
 
 void TurtleCore::SpriteComponent::Start()
@@ -56,8 +53,6 @@ void TurtleCore::SpriteComponent::Destroy()
 
 void TurtleCore::SpriteComponent::SetTexture(const char* path)
 {
-	std::cout << "Sprite Texture Set" << std::endl;
-
 	Renderer* renderer = static_cast<Renderer*>(Owner->GetEngine()->Window->GetRenderer());
 
 	SDL_Surface* textureSurface = IMG_Load(path);

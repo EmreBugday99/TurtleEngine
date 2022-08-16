@@ -4,6 +4,7 @@
 #include "../event/Event.h"
 #include "../event/EventData.h"
 #include "../event/EventEnum.h"
+#include <iostream>
 
 TurtleCore::ModuleManager::ModuleManager (): Engine(nullptr)
 {
@@ -104,8 +105,8 @@ void TurtleCore::ModuleManager::LoadAllModules()
 		if (isCustomModule)
 			continue;
 
+		std::cout << "Loading TurtleModule: " << turtleModule->ModuleName << std::endl;
 		turtleModule->OnModuleLoad(Engine);
-
 		ModuleLoadEvent.Invoke(EventData("ModuleLoad", turtleModule));
 	}
 }
