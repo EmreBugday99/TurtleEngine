@@ -1,4 +1,9 @@
 #include "TransformComponent.h"
+#include <iostream>
+
+TurtleCore::TransformComponent::~TransformComponent()
+{
+}
 
 void TurtleCore::TransformComponent::Initialize()
 {

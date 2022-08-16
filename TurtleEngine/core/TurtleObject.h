@@ -7,6 +7,7 @@ namespace TurtleCore
 	{
 	public:
 		static int Count;
+		bool MarkedForGC;
 
 		API_EXPORT TurtleObject();
 		API_EXPORT virtual ~TurtleObject() = 0;

@@ -40,7 +40,7 @@ std::vector<std::string> TurtleEngine::WindowsModuleLoader::GetModuleNames()
 	{
 		const std::string modulePath = fs::current_path().string() + "\\modules";
 
-		for (auto& file : fs::directory_iterator(modulePath))
+		for (auto& file : fs::recursive_directory_iterator(modulePath))
 		{
 			if (file.path().extension() != ".dll")
 				continue;

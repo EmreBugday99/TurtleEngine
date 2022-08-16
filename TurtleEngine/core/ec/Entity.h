@@ -11,10 +11,12 @@ namespace TurtleCore
 	class Entity : TurtleObject
 	{
 	private:
-		friend class Core;
+		friend class Scene;
 		friend class ECMemory;
 
 		std::vector<Component*> Components;
+		std::vector<Component*> ComponentsToStart;
+
 		Core* Engine;
 
 		Entity(Core* core);
@@ -29,15 +31,18 @@ namespace TurtleCore
 		API_EXPORT void Destroy() override;
 
 		template<typename T>
-		API_EXPORT bool HasComponent() const
+		API_EXPORT void HasComponent(bool& hasComponent) const
 		{
+			hasComponent = false;
+
 			for (Component* component : Components)
 			{
 				if (typeid(T) == typeid(component))
-					return true;
+				{
+					hasComponent = true;
+					break;
+				}
 			}
-
-			return false;
 		}
 
 		template<typename T>
@@ -60,7 +65,7 @@ namespace TurtleCore
 		{
 			T* component = new T();
 			component->Owner = this;
-			Engine->GetMemory().ComponentWaitingToStart.push_back(reinterpret_cast<Component*>(component));
+			ComponentsToStart.push_back(component);
 
 			component->Initialize();
 			return *component;
@@ -77,9 +82,14 @@ namespace TurtleCore
 				if (typeInfoOne != typeInfoTwo)
 					continue;
 
-				Components.erase(Components.begin() + i);
 				Components[i]->Destroy();
-				Engine->GetMemory().MarkObjectForGC(reinterpret_cast<TurtleObject*>(Components[i]));
+
+				bool validScene;
+				Scene& activeScene = Engine->SceneManager.GetActiveScene(validScene);
+				if (validScene)
+					activeScene.GetMemory().MarkObjectForGC(Components[i]);
+
+				Components.erase(Components.begin() + i);
 			}
 		}
 	};

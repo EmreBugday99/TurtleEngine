@@ -11,6 +11,8 @@ RendererModule::RendererModule() : TurtleModule("SDL Renderer")
 {
 	AfterCoreInitialize.BindCallback
 	([&](const TurtleCore::EventData& data) { InitializeWindowCallback(data); });
+
+	ModuleType = TurtleCore::ModuleTypes::CoreModule;
 }
 
 RendererModule::~RendererModule()
@@ -29,6 +31,7 @@ void RendererModule::OnModuleLoad(TurtleCore::Core* core)
 	}
 
 	coreEvent->AddListener(&AfterCoreInitialize);
+	std::cout << "Turtle Module: [" << ModuleName << "] Loaded" << std::endl;
 }
 
 void RendererModule::OnModuleUnload(TurtleCore::Core* core)
@@ -40,7 +43,10 @@ void RendererModule::OnModuleUnload(TurtleCore::Core* core)
 	core->Window = nullptr;
 }
 
-void RendererModule::OnModuleStart(TurtleCore::Core* core) {}
+void RendererModule::OnModuleStart(TurtleCore::Core* core)
+{
+	std::cout << "Turtle Module: [" << ModuleName << "] Started" << std::endl;
+}
 
 void RendererModule::InitializeWindowCallback(const TurtleCore::EventData& data)
 {
@@ -55,9 +61,9 @@ void RendererModule::InitializeWindowCallback(const TurtleCore::EventData& data)
 
 	bool windowInitialized;
 	Window.Initialize(windowInitialized, "Test Window", 600, 600);
-	Window.Core = core;
 	if (windowInitialized == false)
 		return;
 
+	Window.Core = core;
 	core->Window = reinterpret_cast<TurtleCore::Window*>(&Window);
 }

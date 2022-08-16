@@ -15,20 +15,19 @@ void SDLWindow::Initialize(bool& success, const char* title, int width, int heig
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		return;
-	std::cout << "SDL Initialized" << std::endl;
 
 	Window = SDL_CreateWindow(title, 50, 50, width, height, 0);
 	if (Window == nullptr)
 		return;
-	std::cout << "SDL Window Created" << std::endl;
 
 	Renderer.Initialize(success, this);
 	if (success == false || Renderer.GetRenderer() == nullptr)
 		return;
 
-	std::cout << "SDL Renderer Created" << std::endl;
 	SDL_SetRenderDrawColor(static_cast<SDL_Renderer*>(Renderer.GetRenderer()), 0, 0, 0, 255);
 
+	Width = width;
+	Height = height;
 	Running = true;
 	success = true;
 }

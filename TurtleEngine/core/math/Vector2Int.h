@@ -22,6 +22,11 @@ namespace TurtleCore
 		void operator-=(const Vector2Int& other);
 		void operator*=(const Vector2Int& other);
 		void operator/=(const Vector2Int& other);
+		
+		void operator+=(const int& value);
+		void operator-=(const int& value);
+		void operator*=(const int& value);
+		void operator/=(const int& value);
 
 		void Set(const Vector2Int& other);
 		void Set(int value);

@@ -6,6 +6,10 @@
 #include "../graphics/Renderer.h"
 #include <iostream>
 
+TurtleCore::SpriteComponent::~SpriteComponent()
+{
+}
+
 void TurtleCore::SpriteComponent::Initialize()
 {
 	Texture = nullptr;
@@ -15,8 +19,6 @@ void TurtleCore::SpriteComponent::Initialize()
 void TurtleCore::SpriteComponent::Start()
 {
 	Transform = Owner->GetComponent<TransformComponent>();
-	Transform->Position.Set(0);
-	Transform->Size.Set(32);
 
 	Renderer* renderer = static_cast<Renderer*>(Owner->GetEngine()->Window->GetRenderer());
 	SdlRenderer = static_cast<SDL_Renderer*>(renderer->GetRenderer());
@@ -54,7 +56,11 @@ void TurtleCore::SpriteComponent::SetTexture(const char* path)
 	Renderer* renderer = static_cast<Renderer*>(Owner->GetEngine()->Window->GetRenderer());
 
 	SDL_Surface* textureSurface = IMG_Load(path);
+	if (textureSurface == nullptr)
+		std::cout << "Failed to load image at " << path << std::endl;
 	Texture = SDL_CreateTextureFromSurface(static_cast<SDL_Renderer*>(renderer->GetRenderer()), textureSurface);
+	if (Texture == nullptr)
+		std::cout << "Failed to create texture from image: " << path << std::endl;
 
 	SDL_FreeSurface(textureSurface);
 }

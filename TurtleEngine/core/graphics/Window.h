@@ -9,6 +9,8 @@ namespace TurtleCore
 		API_EXPORT Window();
 
 	public:
+		int Width;
+		int Height;
 		API_EXPORT virtual ~Window() = 0;
 
 		API_EXPORT virtual void Initialize(bool& success, const char* title, int width, int height) = 0;

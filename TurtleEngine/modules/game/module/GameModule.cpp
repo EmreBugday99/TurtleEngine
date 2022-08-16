@@ -1,34 +1,33 @@
 #include "GameModule.h"
 #include "ec/Entity.h"
-#include "../component/TestComponent.h"
-#include "components/SpriteComponent.h"
-#include "components/TransformComponent.h"
-#include "ui/UIText.h"
+#include "Core.h"
+#include "scene/SceneManager.h"
+#include "../scenes/TestScene.h"
 
-GameModule::GameModule() : TurtleModule("Game") {}
+GameModule::GameModule() : TurtleModule("Game")
+{
+	ModuleType = TurtleCore::ModuleTypes::GameModule;
+}
+
 GameModule::~GameModule() = default;
 
-void GameModule::OnModuleLoad(TurtleCore::Core* core) {}
+void GameModule::OnModuleLoad(TurtleCore::Core* core)
+{
+	std::cout << "Turtle Module: [" << ModuleName << "] Loaded" << std::endl;
+}
 
-void GameModule::OnModuleUnload(TurtleCore::Core* core) {}
+void GameModule::OnModuleUnload(TurtleCore::Core* core)
+{
+	bool validScene;
+	TurtleCore::Scene& activeScene = core->SceneManager.GetActiveScene(validScene);
+	if (validScene)
+		activeScene.GetMemory().CollectGarbage();
+
+	std::cout << "Turtle Module: [" << ModuleName << "] Unloaded" << std::endl;
+}
 
 void GameModule::OnModuleStart(TurtleCore::Core* core)
 {
-	TurtleCore::Entity& entity = core->CreateEntity();
-
-	TurtleCore::TransformComponent& transform = entity.AddComponent<TurtleCore::TransformComponent>();
-	TestComponent& testComponent = entity.AddComponent<TestComponent>();
-	//TurtleCore::SpriteComponent& sprite = entity.AddComponent<TurtleCore::SpriteComponent>();
-
-	//sprite.SetTexture("assets/boss.png");
-
-	//TurtleCore::Entity& UIEntity = core->CreateEntity();
-	//TurtleCore::TransformComponent& UITransform = UIEntity.AddComponent<TurtleCore::TransformComponent>();
-
-	//UITransform.Position.X = 0;
-	//UITransform.Position.Y = 0;
-	//UITransform.Size.X = 128;
-	//UITransform.Size.Y = 64;
-
-	//TurtleCore::UIText& text = UIEntity.AddComponent<TurtleCore::UIText>();
+	auto& testScene = core->SceneManager.LoadScene<TestScene>();
+	std::cout << "Turtle Module: [" << ModuleName << "] Started" << std::endl;
 }

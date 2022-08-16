@@ -1,6 +1,8 @@
 #pragma once
 #include "module/TurtleModule.h"
 
+namespace TurtleCore { class Entity; }
+
 class GameModule : TurtleCore::TurtleModule
 {
 public:
